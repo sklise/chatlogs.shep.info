@@ -1,10 +1,6 @@
 require 'uri'
 uri = URI.parse ENV['REDISTOGO_URL']
 
-get '/' do
-  erb :front
-end
-
 # 404 Error
 not_found do
   erb :notfound
@@ -14,12 +10,13 @@ get '/thesisweek' do
   erb :thesisweek
 end
 
-get '/:year/:month/:date' do
+get '/:channel/:year/:month/:date' do
+  cache_control :public
   date = Date.parse("#{params[:year]}/#{params[:month]}/#{params[:date]}")
 
   @redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
 
-  length = @redis.llen('messages:itp')
+  length = @redis.llen("messages:#{params[:channel]}")
   @allmessages = @redis.lrange 'messages:itp', 0, length
 
   @messages = []
