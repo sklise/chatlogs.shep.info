@@ -46,3 +46,30 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+body {
+  font-family: 'Helvetica Neue', 'Helvetica', 'Lucida Grande', sans-serif;
+  width: 800px;
+  margin: 1em auto;
+}
+
+td {
+  padding: 0.25em 0.5em 0 0;
+}
+
+h1 {
+  font-size: 2em;
+}
+
+table {
+  table-layout:fixed;
+  width: 800px;
+}
+
+td.time {
+  width: 4em;
+}
+
+td.sender {
+  width: 10em;
+}

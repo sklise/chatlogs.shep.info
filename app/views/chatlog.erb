@@ -1,0 +1,13 @@
+<h1><%= "#{params[:year]}/#{params[:month]}/#{params[:date]}" %></h1>
+
+<table>
+  <tbody>
+<% @messages.each do |message| %>
+  <tr>
+    <td class="time"><%= DateTime.strptime( "#{message["timestamp"]/1000-14400}", "%s").strftime("%I:%M") %></td>
+    <td class="sender"><%= message["sender"] %></td>
+    <td class="message"><%= message["message"] %></td>
+  </tr>
+<% end %>
+  </tbody>
+</table>
