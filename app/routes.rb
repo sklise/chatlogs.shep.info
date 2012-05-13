@@ -1,4 +1,5 @@
 require 'uri'
+require 'open-uri'
 uri = URI.parse ENV['REDISTOGO_URL']
 
 # 404 Error
@@ -11,25 +12,20 @@ get '/thesisweek' do
 end
 
 get '/:channel/:year/:month/:date' do
-  cache_control :public
-  date = Date.parse("#{params[:year]}/#{params[:month]}/#{params[:date]}")
-
-  @redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
-
-  length = @redis.llen("messages:#{params[:channel]}")
-  @allmessages = @redis.lrange 'messages:itp', 0, length
-
-  @messages = []
-
-  day_start = date.to_time.to_i*1000
-  day_end = (date+1).to_time.to_i*1000
-
-  @allmessages.each do |message|
-    message = JSON.parse(message)
-    if !message["timestamp"].nil? && message["timestamp"].to_i > day_start && message["timestamp"].to_i < day_end
-      @messages.push message
-    end
-  end
-
+  AWS::S3::Base.establish_connection!(
+    :access_key_id     => ENV['AWS_ACCESS_KEY'],
+    :secret_access_key => ENV['AWS_SECRET_KEY']
+  )
+  file = (AWS::S3::S3Object.find "chatlogs/#{params['channel']}-#{params['year']}-#{params['month']}-#{params['date']}.js", 'shep.info').value
+  @messages = JSON.parse file
   erb :chatlog
+end
+
+get '/:channel/:year/:month/:date.json' do
+  AWS::S3::Base.establish_connection!(
+    :access_key_id     => ENV['AWS_ACCESS_KEY'],
+    :secret_access_key => ENV['AWS_SECRET_KEY']
+  )
+  thing = AWS::S3::S3Object.find "chatlogs/itp-2012-05-7.js", 'shep.info'
+  thing.value.to_s
 end

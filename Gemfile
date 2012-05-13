@@ -2,6 +2,5 @@ source :rubygems
 gem 'sinatra'
 gem 'sass'
 gem 'json'
-gem 'dalli'
 gem 'redis'
-gem 'sinatra-cache'
+gem 'aws-s3', :require => "aws/s3"
