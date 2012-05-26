@@ -17,8 +17,8 @@ get '/:channel/:year/:month/:date.json' do
     :access_key_id     => ENV['AWS_ACCESS_KEY'],
     :secret_access_key => ENV['AWS_SECRET_KEY']
   )
-  thing = AWS::S3::S3Object.find "chatlogs/itp-#{params['year']}-#{params['month']}-#{params['date']}.js", 'shep.info'
-  thing.value.to_s
+  file = AWS::S3::S3Object.find "chatlogs/itp-#{params['year']}-#{params['month']}-#{params['date']}.js", 'shep.info'
+  JSONP JSON.parse(file.value)
 end
 
 get '/:channel/:year/:month/:date' do
