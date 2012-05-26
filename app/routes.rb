@@ -12,6 +12,7 @@ get '/thesisweek' do
 end
 
 get '/:channel/:year/:month/:date.json' do
+  content_type :json
   AWS::S3::Base.establish_connection!(
     :access_key_id     => ENV['AWS_ACCESS_KEY'],
     :secret_access_key => ENV['AWS_SECRET_KEY']
