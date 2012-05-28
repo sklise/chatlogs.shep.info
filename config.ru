@@ -1,2 +1,2 @@
 require './index'
-run Sinatra::Application
+run ChatLogs
